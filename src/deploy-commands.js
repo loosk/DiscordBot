@@ -12,6 +12,10 @@ const commands = [
         description: 'Grow 1 hair for yourself',
     },
     {
+        name: 'shop',
+        description: 'Open shampoo shop',
+    },
+    {
         name: 'donate',
         description: 'Donate hairs to another user',
         options: [
@@ -63,14 +67,6 @@ const commands = [
             },
         ],
     },
-    {
-        name: 'hairspin',
-        description: 'Spin to get different types of hair',
-    },
-    {
-        name: 'hairscheck',
-        description: 'Check all hair types you have',
-    }
 ];
 
 const rest = new REST({ version: '10' }).setToken(process.env.DISCORD_TOKEN);

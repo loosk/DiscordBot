@@ -1,7 +1,10 @@
 require('dotenv').config();
 const { Client, GatewayIntentBits, Collection } = require('discord.js');
+const interactionHandler = require('./interactionHandler.js');
+const { Collector } = require("discord.js");
 const { clientId, guildId } = require('../config.json');
-const { loadUserHairs, saveUserHairs } = require('./storage');
+const { loadUserHairs, saveUserHairs } = require('./storage.js');
+const { AttachmentBuilder, EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require('discord.js');
 
 const client = new Client({
     intents: [
@@ -93,6 +96,41 @@ client.on('interactionCreate', async interaction => {
 
         await interaction.reply(`${targetUser.username} has ${targetHairs} hairs.`);
     }
+    
+    if (commandName === 'shop') {
+        const file = new AttachmentBuilder('./src/Images/ShopThumbnail.jpg');
+        const shampooShop = new EmbedBuilder()
+            .setColor(0xFF0000)
+            .setTitle('Shampoo Shop')
+            .setDescription('Purchase different shampoos here')
+            .setThumbnail('attachment://ShopThumbnail.jpg')
+            .addFields(
+                { name: '🧴 Shampoo 1', value: '150 Hairs' },
+                { name: '🧴 Shampoo 2', value: '300 Hairs' },
+            )
+            .setTimestamp()
+
+        const shampoo1Button = new ButtonBuilder() 
+            .setCustomId('purchasedShampoo1')
+            .setLabel('Buy Shampoo 1')
+            .setStyle(ButtonStyle.Primary)
+            .setEmoji('🧴')
+
+        const shampoo2Button = new ButtonBuilder() 
+            .setCustomId('purchasedShampoo2')
+            .setLabel('Buy Shampoo 2')
+            .setStyle(ButtonStyle.Primary)
+            .setEmoji('🧴')
+        
+        const row = new ActionRowBuilder()
+		.addComponents(shampoo1Button, shampoo2Button);
+            
+        interaction.reply({ embeds: [shampooShop], files: [file], components: [row] });
+    }
+
+    client.on('interactionCreate', (interaction) => {
+        interactionHandler(interaction);
+      });
 
     if (commandName === 'get') {
         const roleName = interaction.options.getString('role');
