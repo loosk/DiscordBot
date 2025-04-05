@@ -143,7 +143,7 @@ const updateRoles = async (guild, userId, hairs) => {
         const member = await guild.members.fetch(userId);
 
         const hasBaldRole = member.roles.cache.has(BALD_ROLE_ID);
-        if (hairs === 0) {
+        if (hairs <= 0 ) {
             if (!hasBaldRole) {
                 await member.roles.add(BALD_ROLE_ID);
                 console.log(`Added Bald role to ${member.user.tag}`);
